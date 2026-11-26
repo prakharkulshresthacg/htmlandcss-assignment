@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube</title>
+  <!-- Google Font: Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: #181818;
+      color: #ffffff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #717171;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #888888;
+    }
+
+    /* -------------------------------------------
+       TOP NAVIGATION BAR
+       ------------------------------------------- */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background-color: #212121;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+
+    .icon-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .hamburger-icon {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      height: 20px;
+      width: auto;
+    }
+
+    /* Search Section */
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 1 728px;
+      justify-content: center;
+      margin: 0 20px;
+    }
+
+    .search-box-wrapper {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      max-width: 640px;
+      height: 40px;
+    }
+
+    .search-input {
+      flex: 1;
+      height: 100%;
+      background-color: #121212;
+      border: 1px solid #303030;
+      border-right: none;
+      border-radius: 2px 0 0 2px;
+      padding: 0 14px;
+      color: #ffffff;
+      font-size: 16px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .search-input:focus {
+      border-color: #1c62b9;
+    }
+
+    .search-input::placeholder {
+      color: #888888;
+      font-size: 15px;
+    }
+
+    .search-btn {
+      width: 64px;
+      height: 100%;
+      background-color: #313131;
+      border: 1px solid #303030;
+      border-radius: 0 2px 2px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+
+    .search-btn:hover {
+      background-color: #3d3d3d;
+    }
+
+    .search-btn img {
+      width: 18px;
+      height: 18px;
+      opacity: 0.9;
+    }
+
+    .mic-btn {
+      width: 40px;
+      height: 40px;
+      background-color: #181818;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+
+    .mic-btn:hover {
+      background-color: #303030;
+    }
+
+    .mic-btn img {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Right Icons */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-right-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      transition: background-color 0.2s;
+    }
+
+    .nav-right-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-right-btn img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    .user-profile-btn {
+      padding: 0;
+      margin-left: 8px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .user-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    /* -------------------------------------------
+       LAYOUT: SIDEBAR + MAIN CONTENT
+       ------------------------------------------- */
+    .app-layout {
+      display: flex;
+      margin-top: 56px;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* -------------------------------------------
+       LEFT SIDEBAR
+       ------------------------------------------- */
+    aside.sidebar {
+      width: 240px;
+      background-color: #212121;
+      height: calc(100vh - 56px);
+      position: fixed;
+      top: 56px;
+      left: 0;
+      overflow-y: auto;
+      padding-top: 12px;
+      padding-bottom: 20px;
+      z-index: 900;
+    }
+
+    aside.sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+    aside.sidebar:hover::-webkit-scrollbar-thumb {
+      background: #717171;
+    }
+
+    .sidebar-section {
+      padding-bottom: 12px;
+      border-bottom: 1px solid #383838;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      height: 40px;
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 14px;
+      gap: 24px;
+      cursor: pointer;
+      transition: background-color 0.15s;
+      position: relative;
+    }
+
+    .sidebar-item:hover {
+      background-color: #383838;
+    }
+
+    .sidebar-item.active {
+      background-color: #383838;
+      font-weight: 500;
+    }
+
+    .sidebar-icon {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .sidebar-text {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 14px;
+    }
+
+    .sidebar-heading {
+      color: #aaaaaa;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 24px 6px 24px;
+    }
+
+    .sub-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .unread-dot {
+      width: 4px;
+      height: 4px;
+      background-color: #3ea6ff;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    /* -------------------------------------------
+       MAIN CONTENT CONTAINER
+       ------------------------------------------- */
+    main.main-content {
+      margin-left: 240px;
+      flex: 1;
+      background-color: #181818;
+      min-width: 0;
+    }
+
+    /* -------------------------------------------
+       CHIPS / FILTER BAR
+       ------------------------------------------- */
+    .chips-bar-wrapper {
+      position: sticky;
+      top: 56px;
+      background-color: #212121;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 800;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .chips-list {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow-x: hidden;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 12px;
+      height: 32px;
+      border-radius: 16px;
+      background-color: #373737;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 400;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .chip:hover {
+      background-color: #4d4d4d;
+    }
+
+    .chip.active {
+      background-color: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+      font-weight: 500;
+    }
+
+    .chip-next-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 50%;
+      margin-left: 12px;
+      flex-shrink: 0;
+      transition: background-color 0.2s;
+    }
+
+    .chip-next-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .chip-next-btn img {
+      width: 14px;
+      height: 14px;
+      transform: rotate(180deg);
+      filter: invert(1);
+    }
+
+    /* -------------------------------------------
+       VIDEO GRID
+       ------------------------------------------- */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 16px;
+      row-gap: 36px;
+      padding: 24px;
+    }
+
+    .video-card {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .video-card:hover .thumbnail-img {
+      transform: scale(1.02);
+    }
+
+    .thumbnail-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #272727;
+      overflow: hidden;
+    }
+
+    .thumbnail-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+
+    .video-details {
+      display: flex;
+      margin-top: 12px;
+      gap: 12px;
+    }
+
+    .channel-avatar-wrapper {
+      flex-shrink: 0;
+    }
+
+    .channel-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .video-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .channel-name-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 2px;
+    }
+
+    .channel-name {
+      font-size: 12px;
+      color: #aaaaaa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .channel-name:hover {
+      color: #ffffff;
+    }
+
+    .verified-badge {
+      width: 12px;
+      height: 12px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .video-meta {
+      font-size: 12px;
+      color: #aaaaaa;
+      line-height: 1.4;
+    }
+
+    /* Mix Card Specifics */
+    .mix-info {
+      padding-top: 2px;
+    }
+
+    .mix-subtitle {
+      font-size: 12px;
+      color: #aaaaaa;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Responsive Grid adjustments */
+    @media (max-width: 1400px) {
+      .video-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      aside.sidebar {
+        width: 72px;
+      }
+      .sidebar-text, .sidebar-heading, .unread-dot {
+        display: none;
+      }
+      .sidebar-item {
+        justify-content: center;
+        padding: 0;
+        gap: 0;
+      }
+      main.main-content {
+        margin-left: 72px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+      aside.sidebar {
+        display: none;
+      }
+      main.main-content {
+        margin-left: 0;
+      }
+      .nav-center {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       HEADER (TOP NAVIGATION BAR)
+       ========================================== -->
+  <header>
+    <!-- Left: Hamburger & YouTube Logo -->
+    <div class="nav-left">
+      <button class="icon-btn" aria-label="Guide">
+        <img src="assets/hambarger.png" alt="Menu" class="hamburger-icon">
+      </button>
+      <a href="#" class="logo-link" title="YouTube Home">
+        <img src="assets/Youtube logo.png" alt="YouTube" class="logo-img">
+      </a>
+    </div>
+
+    <!-- Center: Search Input, Search Button, Mic -->
+    <div class="nav-center">
+      <div class="search-box-wrapper">
+        <input type="text" class="search-input" placeholder="Search">
+        <button class="search-btn" title="Search">
+          <img src="assets/search.png" alt="Search">
+        </button>
+      </div>
+      <button class="mic-btn" title="Search with your voice">
+        <img src="assets/mic.png" alt="Voice search">
+      </button>
+    </div>
+
+    <!-- Right: Create, Apps, Notifications, User Avatar -->
+    <div class="nav-right">
+      <button class="nav-right-btn" title="Create">
+        <img src="assets/create.png" alt="Create video">
+      </button>
+      <button class="nav-right-btn" title="YouTube apps">
+        <img src="assets/more.png" alt="Apps">
+      </button>
+      <button class="nav-right-btn" title="Notifications">
+        <img src="assets/bell.png" alt="Notifications">
+      </button>
+      <button class="user-profile-btn" title="Account">
+        <img src="assets/profile.png" alt="User Profile" class="user-avatar">
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       MAIN APP LAYOUT
+       ========================================== -->
+  <div class="app-layout">
+
+    <!-- ==========================================
+         LEFT SIDEBAR
+         ========================================== -->
+    <aside class="sidebar">
+      <!-- Section 1: Main Links -->
+      <div class="sidebar-section">
+        <a href="#" class="sidebar-item active">
+          <img src="assets/home.png" alt="Home" class="sidebar-icon">
+          <span class="sidebar-text">Home</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/explore.png" alt="Explores" class="sidebar-icon">
+          <span class="sidebar-text">Explores</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/shorts.png" alt="Shorts" class="sidebar-icon">
+          <span class="sidebar-text">Shorts</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/subscription.png" alt="Subscriptions" class="sidebar-icon">
+          <span class="sidebar-text">Subscriptions</span>
+        </a>
+      </div>
+
+      <!-- Section 2: Library & History -->
+      <div class="sidebar-section">
+        <a href="#" class="sidebar-item">
+          <img src="assets/library.png" alt="Library" class="sidebar-icon">
+          <span class="sidebar-text">Library</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/history.png" alt="History" class="sidebar-icon">
+          <span class="sidebar-text">History</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/your_video.png" alt="Your videos" class="sidebar-icon">
+          <span class="sidebar-text">Your videos</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/watch_later.png" alt="Watch later" class="sidebar-icon">
+          <span class="sidebar-text">Watch later</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/liked.png" alt="Liked videos" class="sidebar-icon">
+          <span class="sidebar-text">Liked videos</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/down_arrow.png" alt="Show more" class="sidebar-icon">
+          <span class="sidebar-text">Show more</span>
+        </a>
+      </div>
+
+      <!-- Section 3: Subscriptions -->
+      <div class="sidebar-section" style="border-bottom: none;">
+        <div class="sidebar-heading">SUBSCRIPTIONS</div>
+        <a href="#" class="sidebar-item">
+          <img src="assets/Ellipse 1.png" alt="Nadir On The Go" class="sub-avatar">
+          <span class="sidebar-text">Nadir On The Go</span>
+          <span class="unread-dot"></span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/Ellipse 1 (1).png" alt="Coke Studio Bangla" class="sub-avatar">
+          <span class="sidebar-text">Coke Studio Bangla</span>
+          <span class="unread-dot"></span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/Ellipse 1 (2).png" alt="MKBHD" class="sub-avatar">
+          <span class="sidebar-text">MKBHD</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/Ellipse 1 (3).png" alt="Figma" class="sub-avatar">
+          <span class="sidebar-text">Figma</span>
+          <span class="unread-dot"></span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/Ellipse 1 (4).png" alt="ATC Android ToTo Company" class="sub-avatar">
+          <span class="sidebar-text">ATC Android ToTo C...</span>
+        </a>
+        <a href="#" class="sidebar-item">
+          <img src="assets/Ellipse 1 (5).png" alt="Alux.com" class="sub-avatar">
+          <span class="sidebar-text">Alux.com</span>
+          <span class="unread-dot"></span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- ==========================================
+         MAIN CONTENT AREA
+         ========================================== -->
+    <main class="main-content">
+
+      <!-- Filter Chips Bar -->
+      <div class="chips-bar-wrapper">
+        <div class="chips-list">
+          <a href="#" class="chip active">All</a>
+          <a href="#" class="chip">Cook Studio</a>
+          <a href="#" class="chip">UX</a>
+          <a href="#" class="chip">Case Study</a>
+          <a href="#" class="chip">Music</a>
+          <a href="#" class="chip">Bnagla Lofi</a>
+          <a href="#" class="chip">Tour</a>
+          <a href="#" class="chip">Saintmartin</a>
+          <a href="#" class="chip">Tech</a>
+          <a href="#" class="chip">iPhone 13</a>
+          <a href="#" class="chip">User Interface Design</a>
+          <a href="#" class="chip">Computer...</a>
+        </div>
+        <button class="chip-next-btn" title="Next">
+          <img src="assets/leftBottom.png" alt="Next">
+        </button>
+      </div>
+
+      <!-- 4-Column Video Grid -->
+      <div class="video-grid">
+
+        <!-- ================= ROW 1 ================= -->
+
+        <!-- Card 1: Bulbuli -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-8.png" alt="Bulbuli | Coke Studio Bangla" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (1).png" alt="Coke Studio Bangla" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">Bulbuli | Coke Studio Bangla | Season One | Ritu Raj X Nandita</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">Coke Studio Bangla</span>
+                <img src="assets/verified.png" alt="Verified" class="verified-badge">
+              </div>
+              <div class="video-meta">1.5M views • 2 days ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Infinix Note 12 -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-9.png" alt="Infinix Note 12" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (2).png" alt="ATC Android ToTo Company" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">Infinix Note 12 : AMOLED &amp; Helio G88 SoC!</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">ATC Andriod ToTo Company</span>
+                <img src="assets/verified.png" alt="Verified" class="verified-badge">
+              </div>
+              <div class="video-meta">4.2M views • 2 days ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: UX Design Case Study -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-10.png" alt="UX Design Case Study" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (3).png" alt="Saptarshi Prakash" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">My first UX Design case study - This got me my first job.</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">Saptarshi Prakash</span>
+              </div>
+              <div class="video-meta">4.8K views • 1 years ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: My Mix -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-11.png" alt="My Mix" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="video-info mix-info">
+              <h3 class="video-title">My Mix</h3>
+              <div class="mix-subtitle">Lopamudra Mitra, Anupam Roy, and more</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= ROW 2 ================= -->
+
+        <!-- Card 5: UX Design - What is it? -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-4.png" alt="UX Design - What is it?" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (4).png" alt="AJ&Smart" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">UX Design - What is it? (From AJ &amp;Smart)</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">AJ&amp;Smar</span>
+                <img src="assets/verified.png" alt="Verified" class="verified-badge">
+              </div>
+              <div class="video-meta">150K views • 3 years ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Mix - Mombati -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-5.png" alt="Mix - Mombati" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="video-info mix-info">
+              <h3 class="video-title">Mix - Mombati | Mohon Sharif | Dhakaiya Dose | Mahib Ahsan ft Anika</h3>
+              <div class="mix-subtitle">Mohon Sharif, Odd Signature, Shayan Chowdhury Arnob, and more</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 7: 48 VISA-FREE -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-6.png" alt="48 VISA-FREE" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (5).png" alt="Nadir On The Go" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">- | 48 VISA-FREE</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">Nadir On The Go</span>
+              </div>
+              <div class="video-meta">1.7M views • 1 years ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 8: Figma Design Speed -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-7.png" alt="14 Advanced Tips to Design FASTER in Figma" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (6).png" alt="Mizko" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">14 Advanced Tips to Design FASTER in Figma</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">Mizko</span>
+                <img src="assets/verified.png" alt="Verified" class="verified-badge">
+              </div>
+              <div class="video-meta">53K views • 1 years ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= ROW 3 ================= -->
+
+        <!-- Card 9: Bharat / Camel Vlog -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail.png" alt="Desert Safari Experience" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (5).png" alt="Nadir On The Go" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">ভারত নাকি অন্য কোথাও? | Desert Safari Experience</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">Nadir On The Go</span>
+              </div>
+              <div class="video-meta">890K views • 4 months ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 10: Tech Skills -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-1.png" alt="Tech Skills to Learn" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (3).png" alt="Saptarshi Prakash" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">Top Tech Skills to Learn in 2022 | UI/UX Design Tools &amp; Workflow</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">Saptarshi Prakash</span>
+              </div>
+              <div class="video-meta">120K views • 6 months ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 11: Google Hat Engineer -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-2.png" alt="Google Software Engineer" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (4).png" alt="Tech Lead" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">Day in the Life of a Google Software Engineer in California</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">TechLead</span>
+                <img src="assets/verified.png" alt="Verified" class="verified-badge">
+              </div>
+              <div class="video-meta">2.1M views • 1 year ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 12: Microsoft Design Team -->
+        <div class="video-card">
+          <div class="thumbnail-wrapper">
+            <img src="assets/Thumbnail-3.png" alt="Microsoft Design Team" class="thumbnail-img">
+          </div>
+          <div class="video-details">
+            <div class="channel-avatar-wrapper">
+              <img src="assets/Ellipse 4 (6).png" alt="Mizko" class="channel-avatar">
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">How Microsoft Designers Work with Engineers | Design Systems</h3>
+              <div class="channel-name-row">
+                <span class="channel-name">Mizko</span>
+                <img src="assets/verified.png" alt="Verified" class="verified-badge">
+              </div>
+              <div class="video-meta">340K views • 8 months ago</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+</body>
+</html>

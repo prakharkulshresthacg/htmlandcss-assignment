@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Card Layout</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Times New Roman", Times, serif;
+      padding: 20px;
+      background-color: #ffffff;
+    }
+
+    /* Main Yellow Container */
+    .container {
+      background-color: #fdd835; /* Yellow background */
+      border: 2px dotted #000;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 1fr; /* Default: 1 column (Mobile) */
+      gap: 15px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Grey Card */
+    .card {
+      background-color: #e0e0e0; /* Light grey background */
+      border: 2px solid #333;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Blue Image Box */
+    .card-image {
+      background-color: #2196f3; /* Blue placeholder */
+      border: 1px dotted #000;
+      height: 110px;
+      padding: 4px;
+      font-size: 14px;
+      color: #000;
+    }
+
+    /* Content Wrapper */
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    /* Title */
+    .card-title {
+      border: 1px dotted #333;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 2px;
+    }
+
+    /* Paragraph Text */
+    .card-text {
+      border: 1px dotted #333;
+      font-size: 14px;
+      line-height: 1.25;
+      padding: 2px;
+    }
+
+    /* Link */
+    .card-link {
+      border: 1px dotted #333;
+      color: #0000ee;
+      text-decoration: underline;
+      font-size: 14px;
+      padding: 2px;
+       width: fit-content;
+    }
+
+    /* -------------------------------------------
+       1. TABLET LAYOUT (2 Columns, Vertical Cards)
+       ------------------------------------------- */
+    @media (min-width: 550px) {
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* -------------------------------------------
+       2. DESKTOP LAYOUT (1 Column, Horizontal Cards)
+       ------------------------------------------- */
+    @media (min-width: 850px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        flex-direction: row; /* Align image and text side-by-side */
+        align-items: stretch;
+      }
+
+      .card-image {
+        width: 120px;
+        height: auto;
+        flex-shrink: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Card 1 -->
+    <div class="card">
+      <div class="card-image">Image</div>
+      <div class="card-content">
+        <div class="card-title">Title</div>
+        <p class="card-text">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero deleniti incidunt rem. Voluptate, tempore quos, suscipit temporibus autem sapiente.
+        </p>
+        <a href="#" class="card-link">Read more</a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <div class="card-image">Image</div>
+      <div class="card-content">
+        <div class="card-title">Title</div>
+        <p class="card-text">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero deleniti incidunt rem. Voluptate, tempore quos, suscipit temporibus autem sapiente.
+        </p>
+        <a href="#" class="card-link">Read more</a>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-image">Image</div>
+      <div class="card-content">
+        <div class="card-title">Title</div>
+        <p class="card-text">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero deleniti incidunt rem. Voluptate, tempore quos, suscipit temporibus autem sapiente.
+        </p>
+        <a href="#" class="card-link">Read more</a>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card">
+      <div class="card-image">Image</div>
+      <div class="card-content">
+        <div class="card-title">Title</div>
+        <p class="card-text">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero deleniti incidunt rem. Voluptate, tempore quos, suscipit temporibus autem sapiente.
+        </p>
+        <a href="#" class="card-link">Read more</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
